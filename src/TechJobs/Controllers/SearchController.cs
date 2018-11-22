@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TechJobs.Models;
 
+
 namespace TechJobs.Controllers
 {
     public class SearchController : Controller
@@ -15,6 +16,28 @@ namespace TechJobs.Controllers
 
         // TODO #1 - Create a Results action method to process 
         // search request and display results
+       [HttpGet]
+        public IActionResult Results(string searchType, string searchTerm)
+        {
+            List<Dictionary<string, string>> jobs;
 
+            if (searchType.Contains("all"))
+            {
+                jobs = JobData.FindByValue(searchTerm);
+            }
+            else
+            {
+                jobs = JobData.FindByColumnAndValue(searchType, searchTerm);
+
+            }
+
+            ViewBag.jobs = jobs;
+            ViewBag.columns = ListController.columnChoices;
+
+            return View("Index");  
+               
+        }
     }
 }
+
+
